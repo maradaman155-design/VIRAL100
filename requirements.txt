@@ -1,0 +1,163 @@
+# Build Tools (instalados primeiro)
+setuptools>=68.0.0
+wheel>=0.41.0
+pip>=23.0.0
+
+# Core Framework
+flask==3.0.0
+gunicorn==21.2.0
+Werkzeug>=3.0.0
+Jinja2>=3.1.0
+MarkupSafe>=2.1.0
+itsdangerous>=2.1.0
+click>=8.0.0
+flask-socketio>=5.3.0
+
+# Environment & Configuration
+python-dotenv>=1.0.0
+configparser>=5.3.0
+trafilatura
+# HTTP Clients
+requests>=2.31.0
+httpx>=0.24.0
+aiohttp>=3.8.0
+urllib3>=2.0.0
+
+# Web Scraping & Automation
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+html5lib>=1.1
+readability-lxml>=0.8.0
+newspaper3k>=0.2.8
+
+# Data Processing & Analysis
+pandas>=2.0.0
+numpy>=2.3.2
+scikit-learn>=1.3.0
+statsmodels>=0.14.0
+
+# Natural Language Processing
+spacy>=3.6.0
+
+# Image Processing & OCR
+Pillow>=10.0.0
+pytesseract>=0.3.10
+
+# AI & LLM Integration
+openai>=1.30.0
+google-generativeai>=0.3.0
+groq>=0.8.0
+huggingface-hub>=0.16.0
+transformers>=4.30.0
+
+# Database
+supabase>=2.0.0
+postgrest>=0.10.0
+psycopg2-binary>=2.9.0
+
+# File Handling
+PyPDF2>=3.0.0
+python-docx>=0.8.11
+openpyxl>=3.1.0
+pdfplumber>=0.9.0
+pypdf>=3.0.0
+PyMuPDF>=1.23.0
+
+# Utilities
+reportlab>=4.0.0
+chardet>=5.0.0
+charset-normalizer>=3.0.0
+certifi>=2023.0.0
+idna>=3.4
+six>=1.16.0
+markdown>=3.5.0
+tqdm>=4.65.0
+python-multipart>=0.0.6
+
+# CORS Support
+Flask-CORS>=4.0.0
+
+# Async Utilities
+async-timeout>=4.0.0
+
+# Logging
+colorlog>=6.7.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Advanced Analytics and Prediction
+pandas>=2.0.0
+numpy>=2.3.2
+scikit-learn>=1.3.0
+statsmodels>=0.14.0
+
+# Natural Language Processing
+spacy>=3.6.0
+textblob>=0.17.1
+nltk>=3.8.1
+
+# Time Series Analysis
+prophet>=1.1.4
+
+# Image Processing & OCR
+Pillow>=10.0.0
+pytesseract>=0.3.10
+opencv-python>=4.8.0
+
+# Advanced Visualization
+plotly>=5.15.0
+bokeh>=3.2.0
+
+# Word Clouds
+wordcloud>=1.9.0
+
+# Network Analysis
+networkx>=3.1
+
+# Sentiment Analysis
+vaderSentiment>=3.3.2
+
+# Topic Modeling
+gensim>=4.3.0
+
+# Statistical Analysis
+scipy>=1.11.0
+
+# Instagram API (versão mais compatível)
+instagram-private-api>=1.6.0
+
+# YouTube API
+google-api-python-client>=2.100.0
+youtube-transcript-api>=0.6.0
+
+# Search API
+exa-py>=1.0.0
+serpapi>=0.1.5
+
+# Performance & Caching
+flask-compress>=1.13
+redis>=4.5.0
+
+# Compatibility fixes for Python 3.12
+typing-extensions>=4.8.0
+pydantic>=2.0.0
+chromedriver==2.24.1
+
+
+playwright
+
+# Scrapy and Splash for web scraping
+scrapy>=2.11.0
+scrapy-splash>=0.8.0
+aiohttp
+aiofiles
+aiohttp
+beautifulsoup4
+flask
+flask-cors
+playwright
+python-dotenv
