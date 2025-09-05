@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -13,44 +12,17 @@ import json
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
-# I'm assuming these services are available in the execution environment as per the original code.
-# If they are not, these lines would need to be adapted to the actual project structure.
-# from services.ai_manager import ai_manager
-# from services.auto_save_manager import salvar_etapa, salvar_erro
-
-# Mocking the services for standalone execution, as the original modules are not provided.
-class MockAIManager:
-    def generate_analysis(self, prompt, max_tokens=1000):
-        # Find the start of the JSON structure and return it as a string
-        start_idx = prompt.find('{')
-        end_idx = prompt.rfind('}')
-        if start_idx != -1 and end_idx != -1:
-            json_str = prompt[start_idx:end_idx+1]
-            # Replace escaped braces for compatibility with json.loads
-            return json_str.replace("{{", "{").replace("}}", "}")
-        return "{}"
-
-ai_manager = MockAIManager()
-
-def salvar_etapa(etapa, dados, categoria="default"):
-    # print(f"SAVING: Etapa '{etapa}' in category '{categoria}'")
-    pass
-
-def salvar_erro(etapa, erro, contexto={}):
-    # print(f"ERROR: Etapa '{etapa}' failed. Error: {erro}")
-    pass
-
+from services.ai_manager import ai_manager
+from services.auto_save_manager import salvar_etapa, salvar_erro
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
-
 
 class EnhancedModuleProcessor:
     """Processador COMPLETO que garante TODOS os módulos em TODAS as etapas"""
 
     def __init__(self):
         """Inicializa processador completo"""
-        # TODOS OS MÓDULO OBRIGATÓRIOS
+        # TODOS OS MÓDULOS OBRIGATÓRIOS
         self.required_modules = {
             'avatars': {
                 'name': 'Avatar Ultra-Detalhado Completo',
@@ -230,7 +202,7 @@ class EnhancedModuleProcessor:
                 salvar_etapa(f"modulo_{module_name}", module_result, categoria=module_name)
 
             except Exception as e:
-                logger.error(f"❌ ERRO CRÍTICO no módulo {module_name}: {e}", exc_info=True)
+                logger.error(f"❌ ERRO CRÍTICO no módulo {module_name}: {e}")
                 salvar_erro(f"modulo_{module_name}", e, contexto={"session_id": session_id})
 
                 # Cria resultado de emergência para manter completude
@@ -242,7 +214,7 @@ class EnhancedModuleProcessor:
         success_rate = (
             processing_results["processing_summary"]["successful_modules"] /
             total_modules * 100
-        ) if total_modules > 0 else 0
+        )
         processing_results["processing_summary"]["completeness_score"] = success_rate
 
         # Gera métricas de qualidade
@@ -289,7 +261,7 @@ class EnhancedModuleProcessor:
             return module_result
 
         except Exception as e:
-            logger.error(f"❌ Erro no processamento de {module_name}: {e}", exc_info=True)
+            logger.error(f"❌ Erro no processamento de {module_name}: {e}")
             return self._create_emergency_module_result(module_name, context)
 
     def _process_avatar_ultra_detalhado(
@@ -329,6 +301,7 @@ Crie um AVATAR ULTRA-DETALHADO COMPLETO baseado nos dados REAIS coletados.
 
 RETORNE JSON ESTRUTURADO:
 
+```json
 {{
   "avatar_ultra_detalhado": {{
     "identificacao_completa": {{
@@ -520,6 +493,7 @@ RETORNE JSON ESTRUTURADO:
     "recomendacoes_teste": "Teste A/B em anúncios, validação com amostra de 100 pessoas"
   }}
 }}
+```
 
 CRÍTICO: Use APENAS dados REAIS extraídos da pesquisa massiva. Personalize o nome e características baseado no segmento específico analisado.
 """
@@ -552,7 +526,7 @@ CRÍTICO: Use APENAS dados REAIS extraídos da pesquisa massiva. Personalize o n
                 raise Exception("IA não respondeu para avatar")
 
         except Exception as e:
-            logger.error(f"❌ Erro no avatar: {e}", exc_info=True)
+            logger.error(f"❌ Erro no avatar: {e}")
             return self._create_emergency_avatar(context, massive_data)
 
     def _create_structured_avatar(self, context: Dict[str, Any], massive_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -642,6 +616,7 @@ Crie EXATAMENTE 19 DRIVERS MENTAIS COMPLETOS baseados nos dados REAIS.
 
 RETORNE JSON com EXATAMENTE 19 drivers COMPLETOS:
 
+```json
 {{
   "drivers_mentais_arsenal": [
     {{
@@ -697,7 +672,7 @@ RETORNE JSON com EXATAMENTE 19 drivers COMPLETOS:
                 raise Exception("IA não respondeu para drivers")
 
         except Exception as e:
-            logger.error(f"❌ Erro nos drivers mentais: {e}", exc_info=True)
+            logger.error(f"❌ Erro nos drivers mentais: {e}")
             return self._create_emergency_drivers(context)
 
     def _process_anti_objecao_completo(
@@ -722,6 +697,7 @@ Crie SISTEMA ANTI-OBJEÇÃO COMPLETO baseado nos dados REAIS.
 
 RETORNE JSON com sistema anti-objeção COMPLETO:
 
+```json
 {{
   "sistema_anti_objecao": {{
     "objecoes_universais": {{
@@ -810,7 +786,7 @@ RETORNE JSON com sistema anti-objeção COMPLETO:
                 raise Exception("IA não respondeu para anti-objeção")
 
         except Exception as e:
-            logger.error(f"❌ Erro no anti-objeção: {e}", exc_info=True)
+            logger.error(f"❌ Erro no anti-objeção: {e}")
             return self._create_emergency_anti_objecao(context)
 
     def _process_provas_visuais_completas(
@@ -833,6 +809,7 @@ Crie ARSENAL COMPLETO de PROVAS VISUAIS baseado nos dados REAIS.
 
 RETORNE JSON com arsenal COMPLETO:
 
+```json
 {{
   "arsenal_provas_visuais": [
     {{
@@ -878,7 +855,7 @@ RETORNE JSON com arsenal COMPLETO:
                 raise Exception("IA não respondeu para provas visuais")
 
         except Exception as e:
-            logger.error(f"❌ Erro nas provas visuais: {e}", exc_info=True)
+            logger.error(f"❌ Erro nas provas visuais: {e}")
             return self._create_emergency_provas_visuais(context)
 
     def _process_pre_pitch_completo(
@@ -900,6 +877,7 @@ Crie PRÉ-PITCH COMPLETO baseado nos dados REAIS.
 
 RETORNE JSON com pré-pitch COMPLETO:
 
+```json
 {{
   "pre_pitch_invisivel": {{
     "sequencia_psicologica": [
@@ -937,7 +915,7 @@ RETORNE JSON com pré-pitch COMPLETO:
                 raise Exception("IA não respondeu para pré-pitch")
 
         except Exception as e:
-            logger.error(f"❌ Erro no pré-pitch: {e}", exc_info=True)
+            logger.error(f"❌ Erro no pré-pitch: {e}")
             return self._create_emergency_pre_pitch(context)
 
     def _process_predicoes_futuro_completas(
@@ -960,6 +938,7 @@ Crie PREDIÇÕES FUTURAS COMPLETAS baseadas nos dados REAIS.
 
 RETORNE JSON com predições COMPLETAS:
 
+```json
 {{
   "predicoes_detalhadas": {{
     "horizonte_6_meses": {{
@@ -1002,7 +981,7 @@ RETORNE JSON com predições COMPLETAS:
                 raise Exception("IA não respondeu para predições")
 
         except Exception as e:
-            logger.error(f"❌ Erro nas predições: {e}", exc_info=True)
+            logger.error(f"❌ Erro nas predições: {e}")
             return self._create_emergency_predicoes(context)
 
     def _process_concorrencia_completa(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
@@ -1019,6 +998,7 @@ Crie ANÁLISE DE CONCORRÊNCIA COMPLETA baseado nos dados REAIS.
 
 RETORNE JSON com análise COMPLETA:
 
+```json
 {{
   "analise_concorrencia": {{
     "concorrentes_identificados": [
@@ -1048,7 +1028,7 @@ RETORNE JSON com análise COMPLETA:
             else:
                 raise Exception("IA não respondeu para concorrência")
         except Exception as e:
-            logger.error(f"❌ Erro na análise de concorrência: {e}", exc_info=True)
+            logger.error(f"❌ Erro na análise de concorrência: {e}")
             return self._create_emergency_concorrencia(context)
 
     def _process_palavras_chave_completas(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
@@ -1065,6 +1045,7 @@ Crie ESTRATÉGIA DE PALAVRAS-CHAVE COMPLETA baseado nos dados REAIS.
 
 RETORNE JSON com estratégia COMPLETA:
 
+```json
 {{
   "estrategia_palavras_chave": {{
     "palavras_primarias": ["Palavra Chave Principal 1", "Palavra Chave Principal 2"],
@@ -1087,7 +1068,7 @@ RETORNE JSON com estratégia COMPLETA:
             else:
                 raise Exception("IA não respondeu para palavras-chave")
         except Exception as e:
-            logger.error(f"❌ Erro na estratégia de palavras-chave: {e}", exc_info=True)
+            logger.error(f"❌ Erro na estratégia de palavras-chave: {e}")
             return self._create_emergency_palavras_chave(context)
 
     def _process_funil_vendas_completo(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
@@ -1108,6 +1089,7 @@ Crie FUNIL DE VENDAS OTIMIZADO COMPLETO baseado nos dados REAIS.
 
 RETORNE JSON com funil COMPLETO:
 
+```json
 {{
   "funil_vendas_otimizado": {{
     "topo_funil": {{
@@ -1151,12 +1133,12 @@ RETORNE JSON com funil COMPLETO:
                     json.dumps(result)
                     return result
                 except Exception as serialize_error:
-                    logger.error(f"❌ Erro de serialização no funil: {serialize_error}", exc_info=True)
+                    logger.error(f"❌ Erro de serialização no funil: {serialize_error}")
                     return self._create_emergency_funil_vendas(context)
             else:
                 raise Exception("IA não respondeu para funil de vendas")
         except Exception as e:
-            logger.error(f"❌ Erro no funil de vendas: {e}", exc_info=True)
+            logger.error(f"❌ Erro no funil de vendas: {e}")
             return self._create_emergency_funil_vendas(context)
 
     def _create_default_funil(self, segmento: str) -> Dict[str, Any]:
@@ -1198,6 +1180,7 @@ Crie MÉTRICAS E KPIs FORENSES COMPLETOS baseado nos dados REAIS.
 
 RETORNE JSON com métricas COMPLETAS:
 
+```json
 {{
   "metricas_kpis": {{
     "metricas_aquisicao": ["CAC (Custo de Aquisição de Cliente)", "LTV (Lifetime Value)", "ROI (Retorno sobre Investimento)"],
@@ -1219,7 +1202,7 @@ RETORNE JSON com métricas COMPLETAS:
             else:
                 raise Exception("IA não respondeu para métricas")
         except Exception as e:
-            logger.error(f"❌ Erro nas métricas: {e}", exc_info=True)
+            logger.error(f"❌ Erro nas métricas: {e}")
             return self._create_emergency_metricas(context)
 
     def _process_insights_exclusivos(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
@@ -1265,7 +1248,7 @@ RETORNE JSON com métricas COMPLETAS:
                 "processing_status": "SUCCESS"
             }
         except Exception as e:
-            logger.error(f"❌ Erro nos insights: {e}", exc_info=True)
+            logger.error(f"❌ Erro nos insights: {e}")
             return self._create_emergency_insights(context)
 
     def _process_plano_acao_completo(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
@@ -1282,6 +1265,7 @@ Crie PLANO DE AÇÃO DETALHADO COMPLETO baseado nos dados REAIS.
 
 RETORNE JSON com plano COMPLETO:
 
+```json
 {{
   "plano_acao_detalhado": {{
     "fase_1_preparacao": {{
@@ -1317,7 +1301,7 @@ RETORNE JSON com plano COMPLETO:
             else:
                 raise Exception("IA não respondeu para plano de ação")
         except Exception as e:
-            logger.error(f"❌ Erro no plano de ação: {e}", exc_info=True)
+            logger.error(f"❌ Erro no plano de ação: {e}")
             return self._create_emergency_plano_acao(context)
 
     def _process_posicionamento_completo(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
@@ -1334,6 +1318,7 @@ Crie POSICIONAMENTO ESTRATÉGICO COMPLETO baseado nos dados REAIS.
 
 RETORNE JSON com posicionamento COMPLETO:
 
+```json
 {{
   "posicionamento_estrategico": {{
     "proposta_valor_unica": "Proposta de Valor Única para o Segmento",
@@ -1355,14 +1340,10 @@ RETORNE JSON com posicionamento COMPLETO:
             else:
                 raise Exception("IA não respondeu para posicionamento")
         except Exception as e:
-            logger.error(f"❌ Erro no posicionamento: {e}", exc_info=True)
+            logger.error(f"❌ Erro no posicionamento: {e}")
             return self._create_emergency_posicionamento(context)
 
-    # ========================================================================
-    # == CORRECTED AND ADDED METHODS
-    # ========================================================================
-
-    def generate_all_modules(self, session_id: str, topic: str) -> Dict[str, Any]:
+    def execute_modular_generation(self, session_id: str, topic: str) -> Dict[str, Any]:
         """
         NOVO MÉTODO: Executa geração modular completa da Etapa 3
         Lê dados das etapas anteriores e gera os 16 módulos sequencialmente
@@ -1371,24 +1352,18 @@ RETORNE JSON com posicionamento COMPLETO:
             logger.info(f"🚀 INICIANDO GERAÇÃO MODULAR - Sessão: {session_id}")
             
             # 1. Carrega dados da Etapa 1 (Markdown)
-            session_dir = f"sessions/{session_id}"
-            os.makedirs(session_dir, exist_ok=True)
-            etapa1_file = f"{session_dir}/etapa1_massive_data.md"
+            etapa1_file = f"sessions/{session_id}/etapa1_massive_data.md"
             if not os.path.exists(etapa1_file):
-                # Mocking file creation for demonstration purposes if it doesn't exist
-                with open(etapa1_file, 'w', encoding='utf-8') as f:
-                    f.write("# Mock Markdown Content")
+                raise FileNotFoundError(f"Dados da Etapa 1 não encontrados: {etapa1_file}")
             
             with open(etapa1_file, 'r', encoding='utf-8') as f:
                 markdown_content = f.read()
             
             # 2. Carrega dados da Etapa 2 (JSON)
-            etapa2_file = f"{session_dir}/etapa2_synthesis.json"
+            etapa2_file = f"sessions/{session_id}/etapa2_synthesis.json"
             if not os.path.exists(etapa2_file):
-                 # Mocking file creation for demonstration purposes if it doesn't exist
-                with open(etapa2_file, 'w', encoding='utf-8') as f:
-                    json.dump({"synthesis": "mock"}, f)
-
+                raise FileNotFoundError(f"Dados da Etapa 2 não encontrados: {etapa2_file}")
+            
             with open(etapa2_file, 'r', encoding='utf-8') as f:
                 synthesis_data = json.load(f)
             
@@ -1455,10 +1430,10 @@ RETORNE JSON com posicionamento COMPLETO:
                             "status": "warning"
                         })
                     
-                    time.sleep(0.1)  # Reduce sleep time as placeholders are fast
+                    time.sleep(1)  # Evita sobrecarga da IA
                     
                 except Exception as module_error:
-                    logger.error(f"❌ Erro no módulo {module_name}: {module_error}", exc_info=True)
+                    logger.error(f"❌ Erro no módulo {module_name}: {module_error}")
                     modules_generated.append({
                         "module_name": module_name,
                         "result": {"error": str(module_error), "processing_status": "ERROR"},
@@ -1476,6 +1451,9 @@ RETORNE JSON com posicionamento COMPLETO:
                 "status": "completed"
             }
             
+            session_dir = f"sessions/{session_id}"
+            os.makedirs(session_dir, exist_ok=True)
+            
             modules_file = f"{session_dir}/etapa3_modules.json"
             with open(modules_file, 'w', encoding='utf-8') as f:
                 json.dump(modular_result, f, ensure_ascii=False, indent=2)
@@ -1490,78 +1468,12 @@ RETORNE JSON com posicionamento COMPLETO:
             }
             
         except Exception as e:
-            logger.error(f"❌ Erro na geração modular: {e}", exc_info=True)
+            logger.error(f"❌ Erro na geração modular: {e}")
             return {
                 "success": False,
                 "error": str(e),
                 "session_id": session_id
             }
-
-    # Placeholder implementations for the missing methods called by generate_all_modules
-    def _process_visao_geral_mercado(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Visão Geral do Mercado")
-        return {"module_name": "visao_geral_mercado", "content": "Visão geral do mercado (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_analise_demanda(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Análise de Demanda")
-        return {"module_name": "analise_demanda", "content": "Análise de Demanda (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_segmentacao_mercado(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Segmentação de Mercado")
-        return {"module_name": "segmentacao_mercado", "content": "Segmentação de Mercado (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_analise_competitiva(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando Análise Competitiva (reutilizando _process_concorrencia_completa)")
-        return self._process_concorrencia_completa(massive_data, context, session_id)
-
-    def _process_analise_tendencias(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Análise de Tendências")
-        return {"module_name": "analise_tendencias", "content": "Análise de Tendências (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_identificacao_oportunidades(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Identificação de Oportunidades")
-        return {"module_name": "identificacao_oportunidades", "content": "Identificação de Oportunidades (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_analise_riscos(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Análise de Riscos")
-        return {"module_name": "analise_riscos", "content": "Análise de Riscos (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_estrategia_posicionamento(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando Estratégia de Posicionamento (reutilizando _process_posicionamento_completo)")
-        return self._process_posicionamento_completo(massive_data, context, session_id)
-
-    def _process_estrategia_pricing(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Estratégia de Pricing")
-        return {"module_name": "estrategia_pricing", "content": "Estratégia de Pricing (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_analise_canais(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Análise de Canais")
-        return {"module_name": "analise_canais", "content": "Análise de Canais (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_estrategia_marketing(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Estratégia de Marketing")
-        return {"module_name": "estrategia_marketing", "content": "Estratégia de Marketing (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_analise_tecnologia(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Análise de Tecnologia")
-        return {"module_name": "analise_tecnologia", "content": "Análise de Tecnologia (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_ambiente_regulatorio(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Ambiente Regulatório")
-        return {"module_name": "ambiente_regulatorio", "content": "Ambiente Regulatório (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_projecoes_financeiras(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Projeções Financeiras")
-        return {"module_name": "projecoes_financeiras", "content": "Projeções Financeiras (placeholder)", "processing_status": "SUCCESS"}
-
-    def _process_plano_implementacao(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando Plano de Implementação (reutilizando _process_plano_acao_completo)")
-        return self._process_plano_acao_completo(massive_data, context, session_id)
-
-    def _process_sistema_monitoramento(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
-        logger.info("Executando placeholder para Sistema de Monitoramento")
-        return {"module_name": "sistema_monitoramento", "content": "Sistema de Monitoramento (placeholder)", "processing_status": "SUCCESS"}
-
 
     def _process_pesquisa_web_consolidada(self, massive_data: Dict[str, Any], context: Dict[str, Any], session_id: str) -> Dict[str, Any]:
         """Processa Pesquisa Web CONSOLIDADA"""
@@ -1581,7 +1493,7 @@ RETORNE JSON com posicionamento COMPLETO:
                 "processing_status": "SUCCESS"
             }
         except Exception as e:
-            logger.error(f"❌ Erro na pesquisa web: {e}", exc_info=True)
+            logger.error(f"❌ Erro na pesquisa web: {e}")
             return self._create_emergency_pesquisa_web(context)
 
     # Métodos de validação para cada módulo
@@ -1606,12 +1518,12 @@ RETORNE JSON com posicionamento COMPLETO:
 
     def _validate_drivers_complete(self, result: Dict[str, Any]) -> Dict[str, Any]:
         """Valida completude dos drivers mentais"""
-        drivers_data = result.get("drivers_mentais_arsenal", {}).get("drivers_mentais_arsenal", [])
+        drivers_data = result.get("drivers_mentais_arsenal", [])
 
         return {
             "is_valid": len(drivers_data) >= 19,
             "drivers_count": len(drivers_data),
-            "completeness_score": min((len(drivers_data) / 19) * 100, 100) if drivers_data else 0,
+            "completeness_score": min((len(drivers_data) / 19) * 100, 100) if len(drivers_data) > 0 else 0,
             "has_warnings": len(drivers_data) < 19
         }
 
@@ -1635,12 +1547,13 @@ RETORNE JSON com posicionamento COMPLETO:
         arsenal = result.get("arsenal_provas_visuais", [])
 
         return {
-            "is_valid": len(arsenal) >= 1, # Relaxed from 3 to 1 for mock data
+            "is_valid": len(arsenal) >= 3,
             "provas_count": len(arsenal),
-            "completeness_score": min((len(arsenal) / 5) * 100, 100) if arsenal else 0,
+            "completeness_score": min((len(arsenal) / 5) * 100, 100) if len(arsenal) > 0 else 0,
             "has_warnings": len(arsenal) < 3
         }
 
+    # Implementar validações para todos os outros módulos...
     def _validate_pre_pitch_complete(self, result: Dict[str, Any]) -> Dict[str, Any]:
         return {"is_valid": True, "completeness_score": 100, "has_warnings": False}
 
@@ -1686,13 +1599,13 @@ RETORNE JSON com posicionamento COMPLETO:
                 raise ValueError("JSON não encontrado na resposta")
 
         except Exception as e:
-            logger.error(f"❌ Erro ao fazer parse do JSON para {context}: {e}", exc_info=True)
+            logger.error(f"❌ Erro ao fazer parse do JSON para {context}: {e}")
             return {}
 
     def _ensure_avatar_completeness(self, avatar_data: Dict[str, Any], context: Dict[str, Any], massive_data: Dict[str, Any]) -> Dict[str, Any]:
         """Garante completude do avatar"""
         if not avatar_data.get("avatar_ultra_detalhado"):
-            avatar_data["avatar_ultra_detalhado"] = self._create_structured_avatar(context, massive_data).get("avatar_ultra_detalhado")
+            avatar_data["avatar_ultra_detalhado"] = self._create_structured_avatar(context, massive_data)
 
         return avatar_data
 
@@ -1727,68 +1640,90 @@ RETORNE JSON com posicionamento COMPLETO:
             "DRIVER DO MÉTODO VS SORTE"
         ]
 
-        existing_driver_names = {d.get("nome") for d in existing_drivers}
-        
         drivers_list = existing_drivers[:]
         segmento = context.get('segmento', 'negócios')
-        
-        current_num = len(drivers_list)
-        for driver_name in base_drivers:
-            if len(drivers_list) >= 19:
+
+        for i, driver_name in enumerate(base_drivers, len(drivers_list) + 1):
+            if i > 19:
                 break
-            if driver_name not in existing_driver_names:
-                current_num += 1
-                drivers_list.append({
-                    "numero": current_num,
-                    "nome": driver_name,
-                    "gatilho_central": f"Gatilho específico para {segmento}",
-                    "definicao_visceral": f"Definição adaptada para o contexto de {segmento}",
-                    "mecanica_psicologica": "Ativa resposta emocional específica no cérebro",
-                    "momento_instalacao": f"Momento estratégico {current_num} da jornada",
-                    "roteiro_ativacao": {
-                        "pergunta_abertura": f"Pergunta de abertura para {driver_name}",
-                        "historia_analogia": f"História personalizada para {segmento} - {driver_name}",
-                        "metafora_visual": f"Metáfora visual impactante para {driver_name}",
-                        "comando_acao": f"Comando de ação específico para {driver_name}"
-                    },
-                    "frases_ancoragem": [
-                        f"Frase de ancoragem 1 para {driver_name}",
-                        f"Frase de ancoragem 2 para {driver_name}",
-                        f"Frase de ancoragem 3 para {driver_name}"
-                    ],
-                    "prova_logica": f"Dados que sustentam {driver_name}",
-                    "loop_reforco": f"Como reativar {driver_name} posteriormente",
-                    "customizacao_segmento": f"Adaptação específica para {segmento}"
-                })
+            drivers_list.append({
+                "numero": i,
+                "nome": driver_name,
+                "gatilho_central": f"Gatilho específico para {segmento}",
+                "definicao_visceral": f"Definição adaptada para o contexto de {segmento}",
+                "mecanica_psicologica": "Ativa resposta emocional específica no cérebro",
+                "momento_instalacao": f"Momento estratégico {i} da jornada",
+                "roteiro_ativacao": {
+                    "pergunta_abertura": f"Pergunta de abertura para {driver_name}",
+                    "historia_analogia": f"História personalizada para {segmento} - {driver_name}",
+                    "metafora_visual": f"Metáfora visual impactante para {driver_name}",
+                    "comando_acao": f"Comando de ação específico para {driver_name}"
+                },
+                "frases_ancoragem": [
+                    f"Frase de ancoragem 1 para {driver_name}",
+                    f"Frase de ancoragem 2 para {driver_name}",
+                    f"Frase de ancoragem 3 para {driver_name}"
+                ],
+                "prova_logica": f"Dados que sustentam {driver_name}",
+                "loop_reforco": f"Como reativar {driver_name} posteriormente",
+                "customizacao_segmento": f"Adaptação específica para {segmento}"
+            })
         return drivers_list
 
     def _validate_module_result(self, module_name: str, module_result: Dict[str, Any], module_config: Dict[str, Any]) -> Dict[str, Any]:
         """Valida resultado do módulo"""
-        
-        try:
-            validation_func = module_config.get('validation')
-            if validation_func:
-                return validation_func(module_result)
-            else:
-                # Default validation if none is specified
-                is_valid = bool(module_result) and module_result.get("processing_status") == "SUCCESS"
-                return {
-                    "is_valid": is_valid,
-                    "has_warnings": not is_valid,
-                    "warnings": [] if is_valid else ["Default validation failed"],
-                    "errors": [],
-                    "validation_timestamp": datetime.now().isoformat()
-                }
-        except Exception as e:
-            logger.error(f"Error during validation of module {module_name}: {e}", exc_info=True)
-            return {
-                "is_valid": False,
-                "has_warnings": True,
-                "warnings": ["Validation function failed with an exception"],
-                "errors": [str(e)],
-                "validation_timestamp": datetime.now().isoformat()
-            }
 
+        is_valid = True
+        warnings = []
+        errors = []
+
+        # Validações básicas
+        if not module_result:
+            is_valid = False
+            errors.append("Módulo retornou resultado vazio")
+
+        if module_result.get("processing_status") != "SUCCESS":
+            warnings.append(f"Status de processamento não é SUCCESS: {module_result.get('processing_status')}")
+
+        # Validações específicas por módulo
+        if module_name == "avatars":
+            if not module_result.get("avatar_ultra_detalhado"):
+                is_valid = False
+                errors.append("Avatar ultra-detalhado não encontrado")
+            else:
+                validation = self._validate_avatar_complete(module_result)
+                if not validation["is_valid"]:
+                    is_valid = False
+                    warnings.extend(validation.get("missing_fields", []))
+
+        elif module_name == "drivers_mentais":
+            drivers = module_result.get("drivers_mentais_arsenal", {}).get("drivers_mentais_arsenal", [])
+            if len(drivers) < 19:
+                warnings.append(f"Apenas {len(drivers)} drivers encontrados, esperados 19")
+            validation = self._validate_drivers_complete(module_result)
+            if not validation["is_valid"]:
+                is_valid = False
+                warnings.append("Número incorreto de drivers mentais")
+
+        elif module_name == "anti_objecao":
+            validation = self._validate_anti_objecao_complete(module_result)
+            if not validation["is_valid"]:
+                is_valid = False
+                warnings.extend(validation.get("missing_objecoes", []))
+
+        elif module_name == "provas_visuais":
+            validation = self._validate_provas_visuais_complete(module_result)
+            if not validation["is_valid"]:
+                is_valid = False
+                warnings.append(f"Número de provas visuais insuficiente: {validation.get('provas_count', 0)}")
+
+        return {
+            "is_valid": is_valid,
+            "has_warnings": len(warnings) > 0,
+            "warnings": warnings,
+            "errors": errors,
+            "validation_timestamp": datetime.now().isoformat()
+        }
 
     def _create_emergency_module_result(self, module_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """Cria resultado de emergência para módulo que falhou"""
@@ -1882,6 +1817,7 @@ RETORNE JSON com posicionamento COMPLETO:
             "completeness_guaranteed": successful_modules >= total_modules * 0.8
         }
 
+# Implementações de emergência para os outros módulos...
     def _create_emergency_avatar(self, context: Dict[str, Any], massive_data: Dict[str, Any]) -> Dict[str, Any]:
         """Cria avatar de emergência estruturado"""
         return self._create_structured_avatar(context, massive_data)
@@ -2078,39 +2014,3 @@ RETORNE JSON com posicionamento COMPLETO:
 
 # Instância global
 enhanced_module_processor = EnhancedModuleProcessor()
-
-# Example of how the corrected code might be run
-if __name__ == '__main__':
-    # This is a demonstration of how to run the corrected method.
-    # The session_id and topic would typically come from your web route.
-    session_id = "test_session_123"
-    topic = "testing_topic"
-    
-    processor = EnhancedModuleProcessor()
-    
-    print("--- Running generate_all_modules (Etapa 3) ---")
-    result_etapa3 = processor.generate_all_modules(session_id=session_id, topic=topic)
-    print("Execution result for generate_all_modules:")
-    print(json.dumps(result_etapa3, indent=2, ensure_ascii=False))
-
-    print("\n--- Running process_all_modules_from_massive_data (Original Logic) ---")
-    # To run the original logic, you need to provide massive_data and context
-    mock_massive_data = {
-        "statistics": {"total_sources": 10, "total_content_length": 1024},
-        "social_media_data": {},
-        "web_search_data": {}
-    }
-    mock_context = {"segmento": "e-commerce", "produto": "novo-produto"}
-    result_original = processor.process_all_modules_from_massive_data(
-        massive_data=mock_massive_data,
-        context=mock_context,
-        session_id=session_id
-    )
-    print("\nExecution result for process_all_modules_from_massive_data:")
-    # Print only a summary to avoid excessive output
-    summary = {
-        "session_id": result_original["session_id"],
-        "summary": result_original["processing_summary"],
-        "modules_processed": list(result_original["modules_data"].keys())
-    }
-    print(json.dumps(summary, indent=2, ensure_ascii=False))
